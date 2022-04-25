@@ -1,0 +1,3 @@
+build/temp.linux-x86_64-3.7/set_mds_pertubations.o: \
+ set_mds_pertubations.c
+commandline: -I/home/lena/anaconda3/envs/setmds/lib/python3.7/site-packages/numpy/core/include -I/home/lena/anaconda3/envs/setmds/lib/python3.7/site-packages/numpy/core/include -Ibuild/src.linux-x86_64-3.7/numpy/distutils/include -I/home/lena/anaconda3/envs/setmds/include/python3.7m -c-msse -msse2 -msse3-I/home/lena/anaconda3/envs/setmds/lib/python3.7/site-packages/numpy/core/include -I/home/lena/anaconda3/envs/setmds/lib/python3.7/site-packages/numpy/core/include -Ibuild/src.linux-x86_64-3.7/numpy/distutils/include -I/home/lena/anaconda3/envs/setmds/include/python3.7m
