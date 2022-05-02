@@ -8,6 +8,7 @@ import time
 import random
 import sys
 
+
 from mds_fast import (
     distance_matrix,
     distance_matrix_landmarks,
@@ -109,8 +110,8 @@ def pattern_search_mds(d_goal,
 
     prob_matrix = np.full((n_samples, 2 * n_components), prob_init) #$$$$$$$$$$$$$
     
-    xs, error, d_current = _mds_iterations(turn,max_iter,radius,radius_barrier,error,prev_error,radius_update_tolerance,points,
-    sample_points, d_goal, d_current, xs, prob_thr, prob_step, prob_matrix, explore_dim_percent, n_jobs, verbose)
+    xs, error, d_current = _mds_iterations(turn,max_iter,radius,radius_barrier,error,prev_error,radius_update_tolerance,points,sample_points, d_goal,d_current,xs,
+    prob_thr,prob_step,prob_matrix,explore_dim_percent,n_jobs,verbose)
 
     
 
@@ -222,7 +223,8 @@ class MDS(BaseEstimator):
             )            
 
         return self.embedding_, self.error_, self.d_current
-        
+
+
     def fit(self, X, init=None):   
         self.fit_transform(X, init=init)
         return self

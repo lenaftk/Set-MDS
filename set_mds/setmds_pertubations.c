@@ -1,17 +1,19 @@
+
+  
 #include <omp.h>
 #include <math.h>
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
-#include "mds_pertubations.h"
+#include "setmds_pertubations.h"
 
 #define ERROR_BUF_SZ 2000
 #define DBL_MAX 1.79769e+308
 double error_buf[ERROR_BUF_SZ] = {DBL_MAX};
-
 /*
  * Max number of dimensions to reduce to is 1000
  */
+
 
 double
 single_pertub_error(double* d_current, double* d_goal,
@@ -30,9 +32,9 @@ single_pertub_error(double* d_current, double* d_goal,
         if(row != ll)
         {
             d_prev = d_current[d_idx + ll] * d_current[d_idx + ll];
-            diff1 = (xs[x_idx + pertub_dim] - xs[ll * x_cols + pertub_dim]); //#afairesi to simeio pou kounietai (i diastasi tou) - ola ta ipoloipa simeia stin sugkekrimeni diastasi   
-            before = diff1 * diff1;  //vriskw tin diafora sto sugkekrimeni diastasi
-            after = (diff1 + step) * (diff1 + step);  // briskw tin diafora sto step
+            diff1 = (xs[x_idx + pertub_dim] - xs[ll * x_cols + pertub_dim]);
+            before = diff1 * diff1;
+            after = (diff1 + step) * (diff1 + step);
             diff = d_goal[d_idx + ll] - sqrt(d_prev - before + after);
             error += diff * diff;
         }
@@ -40,6 +42,31 @@ single_pertub_error(double* d_current, double* d_goal,
     return error;
 }
 
+
+
+// double
+// single_pertub_error_landmark(double* d_current, double* d_goal,
+//                     double* xs, int row, int pertub_dim,
+//                     int n_landmarks, int x_cols, double step)
+// {
+//     double error = 0;
+//     int ll;
+//     int d_idx = n_landmarks * row;
+//     int x_idx = x_cols * row;
+
+//     //#pragma omp parallel for reduction (+:error)
+//     for(ll = 0; ll < n_landmarks; ll++)
+//     {
+//         double d_prev, before, after, diff1, diff;
+//             d_prev = d_current[d_idx + ll] * d_current[d_idx + ll];
+//             diff1 = (xs[x_idx + pertub_dim] - xs[ll * x_cols + pertub_dim]);
+//             before = diff1 * diff1;
+//             after = (diff1 + step) * (diff1 + step);
+//             diff = d_goal[d_idx + ll] - sqrt(d_prev - before + after);
+//             error += diff * diff;
+//     }
+//     return error;
+// }
 
 
 pertub_res

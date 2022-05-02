@@ -1,0 +1,14 @@
+_matrix(
+, d_current, point, optimum_step, optimum_k)
+[point, optimum_k] += optimum_step
+bb
+se >= 2:
+#
+g_iteration(turn, radius, prev_error, error)
+, error, d_current
+
+r def set_mds(d_goal,
+nents=2,
+#
+_update_tolerance=1e-4,
+#
