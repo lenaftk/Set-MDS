@@ -42,5 +42,3 @@ def distance_matrix(double[:, :] A):
             D[jj, ii] = tmpss
     return D
 
-
-    def sets_distance matrix[]

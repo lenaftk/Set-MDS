@@ -5,13 +5,13 @@ import os
 from Cython.Build import cythonize
 
 def configuration(parent_package="", top_path=None):
-    os.environ['CFLAGS'] = '-Wno-cpp -shared -fno-strict-aliasing -fopenmp -ffast-math -O3 -Wall -fPIC'
+    os.environ['CFLAGS'] = '-Wno-cpp -fno-strict-aliasing -ffast-math -O3 -Wall -fPIC'
     config = Configuration('set_mds_algorithm', parent_package, top_path)
     libraries = []
     if os.name == 'posix':
         libraries.append('m')
     config.add_extension('set_mds_fast',
-                         sources=["set_mds_fast.pyx", "set_mds_pertubations.c"],
+                         sources=["set_mds_fast.pyx"],
                          include_dirs=[numpy.get_include()],
                          libraries=libraries)
     config.ext_modules[-1] = cythonize(config.ext_modules[-1], language='c')[0]

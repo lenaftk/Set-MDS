@@ -13,8 +13,8 @@ from create_synthetic_dataset import SyntheticDataset
 # from split import split
 
 # Create Synthetic dataset
-k=4
-n_samples = 4
+k=2
+n_samples = 3
 dataset1 = SyntheticDataset(n_samples=n_samples,
                             n_components=3,
                             k=k)
@@ -35,12 +35,11 @@ godzilla = MDS(
 start = time.time()
 xs, error, d_current = godzilla.fit_transform(d_goal)
 end = time.time()
-print("Total MDS time : ", end - start )
+print("Total MDS time : ", end - start)
 print("Total MDS error : ", error)
 #print([item[0] for item in time_error])
 
-# Set MDS routine. Use the d_current and the xs
-
+##### Set MDS routine. Use the d_current and the xs
 
 def _midpoint(xs):
     midpoint = np.zeros((1,xs.shape[1]))
