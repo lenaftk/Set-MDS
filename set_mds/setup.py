@@ -5,7 +5,7 @@ import os
 from Cython.Build import cythonize
 
 def configuration(parent_package="", top_path=None):
-    os.environ['CFLAGS'] = '-Wno-cpp -fno-strict-aliasing  -ffast-math -O3 -Wall -fPIC'
+    os.environ['CFLAGS'] = '-Wno-cpp -fno-strict-aliasing -fopenmp -ffast-math -O3 -Wall -fPIC'
     config = Configuration('set_mds', parent_package, top_path)
     libraries = []
     if os.name == 'posix':

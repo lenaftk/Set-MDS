@@ -1,3 +1,4 @@
+
 #!python
 #cython: language_level=3
 # cython: boundscheck=False
@@ -9,12 +10,10 @@ from cython.parallel cimport prange
 
 # don't use np.sqrt - the sqrt function from the C standard library is much
 # faster
-from libc.stdio cimport printf
-from libc.stdio cimport FILE, fopen, fwrite, fscanf, fclose, fprintf, fseek, ftell, SEEK_END, rewind, fread
 from libc.math cimport sqrt
 
 '''
-Port struct defined in setmds_pertubations.h
+Port struct defined in mds_pertubations.h
 Contains:
     - The index k of the point that is moved
     - The step that this point is moved
@@ -33,9 +32,11 @@ Get the pertubation that yields the best error. Defined in mds_pertubations.c
 '''
 
 cdef extern pertub_res min_pertub_error(
+        int n_sets, long *sets, double* d_current_sets, 
         double* xs, double radius, double* d_current,
-        double* d_goal, int ii, int x_rows, int x_cols, double prop_thr, double prop_step, double* prop_matrix, int turn,
+        double* d_goal, int ii, int x_rows, int x_cols, int turn,
         double percent, int n_jobs)
+
 
 
 def distance_matrix(double[:, :] A):
@@ -57,25 +58,6 @@ def distance_matrix(double[:, :] A):
             D[jj, ii] = tmpss
     return D
 
-cpdef distance_matrix_nk(double[:, :] A, nd_arr[np.float64_t, ndim=2] D):
-    cdef:
-        Py_ssize_t nrow = A.shape[0]
-        Py_ssize_t ncol = A.shape[1]
-        Py_ssize_t ii, jj, kk
-        double tmpss, diff
-
-    for jj in range(nrow):
-        tmpss = 0
-        for kk in range(ncol):
-            diff = A[nrow-1, kk] - A[jj, kk]
-            tmpss += diff * diff
-        tmpss = sqrt(tmpss)
-        D[nrow-1, jj] = tmpss
-        D[jj, nrow-1] = tmpss
-        print(tmpss)
-
-    return D
-
 cpdef distance_matrix_landmarks(double[:, :] A, int  n_landmarks):
     cdef:
         Py_ssize_t nrow = A.shape[0]
@@ -95,18 +77,6 @@ cpdef distance_matrix_landmarks(double[:, :] A, int  n_landmarks):
     return D
 
 
-cpdef double mse1d_set(nd_arr[np.float64_t, ndim=1] d_goal, nd_arr[np.float64_t, ndim=1] d):
-    cdef:
-        Py_ssize_t N = d.shape[0]
-       
-        Py_ssize_t ii = 0
- 
-        double s = 0, diff = 0
-    for ii in range(N):
-        diff = d_goal[ii] - d[ii]
-        s += diff * diff
-    return s
-
 cpdef double mse(nd_arr[np.float64_t, ndim=1] d_goal, nd_arr[np.float64_t, ndim=1] d):
     cdef:
         Py_ssize_t N = d.shape[0]
@@ -119,30 +89,13 @@ cpdef double mse(nd_arr[np.float64_t, ndim=1] d_goal, nd_arr[np.float64_t, ndim=
         s += diff * diff
     return s
 
-'''cpdef double mse2d_set(nd_arr[np.float64_t, ndim=2] xs,
-                            nd_arr[np.float64_t, ndim=2] d_goal, 
-                            int point,
-                            int kj,
-                            nd_arr[np.float64_t, ndim=2] all_sets):
-    cdef:
-        Py_ssize_t N = d_goal.shape[0]
-        Py_ssize_t k = all_sets.shape[0]
-        Py_ssize_t ii = 0
-        np.ndarray[np.float64_t, ndim=2] temp_D = np.zeros((1,N) np.double)
-        double s = 0, diff = 0
 
-    for jj in range(N):
-        
-    for ii in range(N):
-        for jj in range(ii + 1):
-            diff = d_goal[ii, jj] - d[ii, jj]
-            s += diff * diff
-    return s'''
 
 cpdef double mse2(nd_arr[np.float64_t, ndim=2] d_goal, nd_arr[np.float64_t, ndim=2] d):
     cdef:
         Py_ssize_t N = d.shape[0]
         Py_ssize_t ii = 0
+
         double s = 0, diff = 0
 
     for ii in range(N):
@@ -150,7 +103,6 @@ cpdef double mse2(nd_arr[np.float64_t, ndim=2] d_goal, nd_arr[np.float64_t, ndim
             diff = d_goal[ii, jj] - d[ii, jj]
             s += diff * diff
     return s
-
 
 cpdef double mse2_landmarks(nd_arr[np.float64_t, ndim=2] d_goal, nd_arr[np.float64_t, ndim=2] d):
     cdef:
@@ -185,6 +137,9 @@ cpdef nd_arr[np.float64_t, ndim=2] update_distance_matrix(
     d_current[ii, ii] = 0
     return d_current
 
+
+
+
 cpdef nd_arr[np.float64_t, ndim=2] update_distance_matrix_landmarks(
         nd_arr[np.float64_t, ndim=2] xs,
         nd_arr[np.float64_t, ndim=2] d_current,
@@ -204,37 +159,38 @@ cpdef nd_arr[np.float64_t, ndim=2] update_distance_matrix_landmarks(
             d_current[ii, jj] = d
     return d_current
 
-
 cpdef (double, int, double) c_pertub_error(
+    int n_sets,
+    list sets_,
+    nd_arr[np.float64_t, ndim=2, mode="c"] d_sets,
     nd_arr[np.float64_t, ndim=2, mode="c"] xs,
     double radius,
     nd_arr[np.float64_t, ndim=2, mode="c"] d_current,
     nd_arr[np.float64_t, ndim=2, mode="c"] d_goal,
     int ii,
-    double prop_thr,
-    double prop_step,
-    nd_arr[np.float64_t, ndim=2, mode="c"] prop_matrix,
     int turn,
     double percent=.5,
     int n_jobs=1):
     cdef:
         int x_cols = xs.shape[1]
-        #int x_rows = xs.shape[0]
-        int x_rows = d_goal.shape[1]
-        int jj, kk, ll
-
+        int x_rows = xs.shape[0]
+        #int x_rows = d_goal.shape[1]
+        int jj=0, kk, ll
         double e = 0
         double d_temp = 0
+        long[:] sets = np.zeros(x_rows,dtype=int)
+
+    
+    for jj in range(x_rows):
+        sets[jj]=sets_[jj]
 
     cdef:
         pertub_res optimum = min_pertub_error(
-            &xs[0,0], radius, &d_current[0, 0], &d_goal[0, 0],
-            ii, x_rows, x_cols, prop_thr, prop_step, &prop_matrix[0,0], turn, percent, n_jobs)
+        n_sets, &sets[0] ,&d_sets[0,0],&xs[0,0], radius, &d_current[0, 0], &d_goal[0, 0],
+            ii, x_rows, x_cols, turn, percent, n_jobs)
         double optimum_error = optimum.error
         int optimum_k = optimum.k
         double optimum_step = optimum.step
        
 
     return optimum_error, optimum_k, optimum_step
-
-

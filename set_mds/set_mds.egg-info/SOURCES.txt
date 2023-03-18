@@ -7,11 +7,11 @@ setmds_pertubations.c
 setmds_pertubations.h
 setup.py
 test.py
-/Users/lena/opt/anaconda3/envs/setmds/lib/python3.9/site-packages/numpy/core/include/numpy/arrayobject.h
-/Users/lena/opt/anaconda3/envs/setmds/lib/python3.9/site-packages/numpy/core/include/numpy/arrayscalars.h
-/Users/lena/opt/anaconda3/envs/setmds/lib/python3.9/site-packages/numpy/core/include/numpy/ndarrayobject.h
-/Users/lena/opt/anaconda3/envs/setmds/lib/python3.9/site-packages/numpy/core/include/numpy/ndarraytypes.h
-/Users/lena/opt/anaconda3/envs/setmds/lib/python3.9/site-packages/numpy/core/include/numpy/ufuncobject.h
+/Users/lenasthesis/opt/anaconda3/envs/setmds/lib/python3.9/site-packages/numpy/core/include/numpy/arrayobject.h
+/Users/lenasthesis/opt/anaconda3/envs/setmds/lib/python3.9/site-packages/numpy/core/include/numpy/arrayscalars.h
+/Users/lenasthesis/opt/anaconda3/envs/setmds/lib/python3.9/site-packages/numpy/core/include/numpy/ndarrayobject.h
+/Users/lenasthesis/opt/anaconda3/envs/setmds/lib/python3.9/site-packages/numpy/core/include/numpy/ndarraytypes.h
+/Users/lenasthesis/opt/anaconda3/envs/setmds/lib/python3.9/site-packages/numpy/core/include/numpy/ufuncobject.h
 set_mds.egg-info/PKG-INFO
 set_mds.egg-info/SOURCES.txt
 set_mds.egg-info/dependency_links.txt
