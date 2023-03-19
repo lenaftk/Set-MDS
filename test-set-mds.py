@@ -1,4 +1,3 @@
-
 import sys
 import time
 import numpy as np
@@ -7,14 +6,24 @@ sys.path.insert(0,'./synthetic_data')
 sys.path.insert(0,'./set_mds')
 
 from bootstrapped_pattern_search.mds_len import MDS
-from set_mds_2 import (add_midpoint, set_mds)
+from set_mds_1 import (add_midpoint, set_mds)
 #apo edw fortwnei ta datasets...
 from synthetic_data.create_synthetic_dataset import SyntheticDataset
 # from split import split
 
+#python program to check if a directory exists
+import os
+path = "./savefigs"
+# Check whether the specified path exists or not
+isExist = os.path.exists(path)
+if not isExist:
+   # Create a new directory because it does not exist
+   os.makedirs(path)
+   print("The new directory is created!")
+
 # Create Synthetic dataset
 k= 2
-n_sets = 18
+n_sets = 3 #18
 dataset1 = SyntheticDataset(n_samples=n_sets,
                             n_components=2,
                             k=k,

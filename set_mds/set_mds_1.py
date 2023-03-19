@@ -131,6 +131,7 @@ def best_pertub(sets,
 
 
 def set_mds(xs, d_current, d_goal, error, k, n_samples): 
+    savefigs_number=0
     init_error = error
     d_current_initial=d_current.copy()
     radius_update_tolerance=1e-20
@@ -262,7 +263,8 @@ def set_mds(xs, d_current, d_goal, error, k, n_samples):
                     plt.annotate(text[i], (x[i]+0.002, y[i] + 0.002))
   
                 ## adjusting the scale of the axes
-                plt.savefig(f'./savefigs/mds-{kj}-{turn}-{point}.png')
+                savefigs_number+=1
+                plt.savefig(f'./savefigs/mds-{savefigs_number}.png')
                 plt.close()
 
  

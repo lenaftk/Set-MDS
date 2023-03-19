@@ -64,6 +64,7 @@ def pattern_search_mds(d_goal,
                        dataset = None
                       ):
     #ta n_samples == n_landmarks otan ola ta vectors einai landmarks
+    savefigs_num=0
     n_samples = d_goal.shape[0]
     if n_landmarks is None:
         n_landmarks = n_samples
@@ -132,13 +133,14 @@ def pattern_search_mds(d_goal,
             ax = plt.gca()
             ax.set_xlim([-11, 11])
             ax.set_ylim([-5, 5])
-            plt.title("MDS. Turn= " + str(turn) +  " Point= " + str(point) )
+            plt.title("MDS. Turn= " + str(turn) +  " Point= " + str(point))
             # Loop for annotation of all points
             for i in range(len(x)):
                 plt.annotate(text[i], (x[i]+0.002, y[i] + 0.002))
 
             ## adjusting the scale of the axes
-            plt.savefig(f'./savefigs/1mds-{turn}{point}.png')
+            savefigs_num+=1
+            plt.savefig(f'./savefigs/mds-{savefigs_num}.png')
             plt.close()
 
         if verbose == 1:
