@@ -8,9 +8,19 @@ To add something on github:
 
 
 # How to install
-cd set_mds_algorithm
+cd set_mds
 python setup.py build_ext --inplace
 python setup.py install
+cd ..
+cd bootstrapped_pattern_search
+python setup.py build_ext --inplace
+python setup.py install
+cd ..
+cd synthetic_data
+python setup.py build_ext --inplace
+python setup.py install
+cd ..
+
 
 
 # to set up your anaconda enviroment: conda install the following: 
