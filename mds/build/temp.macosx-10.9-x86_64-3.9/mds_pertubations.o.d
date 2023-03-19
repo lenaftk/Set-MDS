@@ -1,3 +1,0 @@
-build/temp.macosx-10.9-x86_64-3.9/mds_pertubations.o: mds_pertubations.c \
-  mds_pertubations.h
-commandline: -I/Users/lena/opt/anaconda3/envs/setmds/lib/python3.9/site-packages/numpy/core/include -I/Users/lena/opt/anaconda3/envs/setmds/lib/python3.9/site-packages/numpy/core/include -Ibuild/src.macosx-10.9-x86_64-3.9/numpy/distutils/include -I/Users/lena/opt/anaconda3/envs/setmds/include/python3.9 -c-msse -msse2 -msse3-I/Users/lena/opt/anaconda3/envs/setmds/lib/python3.9/site-packages/numpy/core/include -I/Users/lena/opt/anaconda3/envs/setmds/lib/python3.9/site-packages/numpy/core/include -Ibuild/src.macosx-10.9-x86_64-3.9/numpy/distutils/include -I/Users/lena/opt/anaconda3/envs/setmds/include/python3.9
