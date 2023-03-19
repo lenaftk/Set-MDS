@@ -264,7 +264,7 @@ def set_mds(xs, d_current, d_goal, error, k, n_samples):
   
                 ## adjusting the scale of the axes
                 savefigs_number+=1
-                plt.savefig(f'./savefigs/mds-{savefigs_number}.png')
+                plt.savefig(f'./savefigs/setmds-{savefigs_number}.png')
                 plt.close()
 
  
