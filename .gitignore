@@ -1,8 +1,8 @@
-*/*.png
+*.png
 */_mds_fast.c
 */mds_fast.c
 */setmds_fast.c
-*/*.npz
+*.npz
 
 
 experiments/config.py
