@@ -73,13 +73,13 @@ def _point_sampling(points, keep_percent=1.0, turn=-1, recalculate_each=-1):
     keep = int(points.shape[0] * keep_percent)
     return np.random.choice(points, size=keep, replace=False)
 
-def _matrix_initialization(n_samples,k,d_current):
+def _matrix_initialization(n_samples,k,d_nk_current):
     set_point_error = np.zeros(n_samples) #pinakas pou tha krataei to error, kai tha prepei na epilegw to kalitero. Na ginei max value kai oxi miden.
     k_set = np.negative(k) #min_value, which set
-    d_current_nk = np.zeros((n_samples+k,n_samples+k))
+    d_nk_current_nk = np.zeros((n_samples+k,n_samples+k))
     for ii in range(n_samples):
         for jj in range(ii+1,n_samples):
-            d_current_nk[ii][jj] = d_current[ii][jj]
+            d_nk_current_nk[ii][jj] = d_current[ii][jj]
             d_current_nk[jj][ii] = d_current[ii][jj]
     return set_point_error, k_set, d_current_nk
 
@@ -137,9 +137,9 @@ def find_point_in_same_set(sets_list, set_to_find):
     return indices
 
 
-def set_mds(xs, d_current, d_goal, error, k, n_samples): 
+def set_mds(xs, d_nk_current, d_goal, error, k, n_samples, savefigg): 
     init_error = error
-    d_current_initial=d_current.copy()
+    d_nk_current_initial=d_nk_current.copy()
     radius_update_tolerance=1e-20
     max_iter=1000
     radius_barrier=1e-10
@@ -152,18 +152,24 @@ def set_mds(xs, d_current, d_goal, error, k, n_samples):
     for ii in range(n_samples):
         sets.append(int(ii))
     #initialize d_sets
-    d_sets=d_current.copy()
+    d_sets=d_nk_current.copy()
     #start spliting
     for kj in range(k):
         print("START!!!", kj)
-        xs = add_midpoint(xs) ##or next 2 lines for random point
+        #xs = add_midpoint(xs) ##or next 2 lines for random point
         #xs = add_new_point(xs)
         #xs = change_randompoint(xs)
-        d_current = init_point_to_distance_matrix(d_current)
-        d_current = change_point_to_distance_matrix(xs,d_current)
+        d_nk_current = init_point_to_distance_matrix(d_nk_current)
+        #d_nk_current = change_point_to_distance_matrix(xs,d_nk_current)
         print("xs= \n", xs)
-        print(d_current)
+        print(d_nk_current)
         sets.append(int(0))
+
+        for xi in range(n_samples):
+            for xj in range(xs.shape[1]):
+                
+        
+        return 0
 
         temp_set_error=[]
         for set in range(n_samples):
@@ -171,13 +177,13 @@ def set_mds(xs, d_current, d_goal, error, k, n_samples):
             #print("kj, SET IS",kj,set,sets)
             temp_xs = xs.copy()
             temp_d_sets = d_sets.copy() #arxikopoiw pali ton pinaka
-            temp_d_current=d_current.copy()
+            temp_d_nk_current=d_nk_current.copy()
             temp_set_error.append(np.Inf) #arxikopoiw to error
             for ii in range(n_samples+kj+1):
-                if(d_current[n_samples+kj][ii]  < d_sets[set][sets[ii]]):
-                    #print("yes",d_current[n_samples+kj][ii],d_sets[set][sets[ii]],n_samples+kj,ii)
-                    temp_d_sets[set][sets[ii]] = d_current[n_samples+kj][ii]
-                    temp_d_sets[sets[ii]][set] = d_current[n_samples+kj][ii]
+                if(d_nk_current[n_samples+kj][ii]  < d_sets[set][sets[ii]]):
+                    #print("yes",d_nk_current[n_samples+kj][ii],d_sets[set][sets[ii]],n_samples+kj,ii)
+                    temp_d_sets[set][sets[ii]] = d_nk_current[n_samples+kj][ii]
+                    temp_d_sets[sets[ii]][set] = d_nk_current[n_samples+kj][ii]
                 
             #temp_set_error[set] = error - mse1d(d_goal[set], d_sets[set]) + mse1d(d_goal[set], temp_d_sets[set]) 
             temp_set_error[set] = mse2d(d_goal,temp_d_sets)
@@ -202,7 +208,7 @@ def set_mds(xs, d_current, d_goal, error, k, n_samples):
                         temp_d_sets,
                         temp_xs,
                         radius,
-                        temp_d_current,
+                        temp_d_nk_current,
                         d_goal,
                         point,
                         turn,
@@ -216,11 +222,11 @@ def set_mds(xs, d_current, d_goal, error, k, n_samples):
                     if (point_error >= optimum_error):
                         print("yes")
                         temp_set_error[set] -= (point_error - optimum_error)
-                        temp_d_current = update_distance_matrix(
-                            temp_xs, temp_d_current, point, optimum_step, optimum_k)
-                    # print(point, d_current)
+                        temp_d_nk_current = update_distance_matrix(
+                            temp_xs, temp_d_nk_current, point, optimum_step, optimum_k)
+                    # print(point, d_nk_current)
                         temp_d_sets = update_d_sets_matrix(
-                            temp_d_current,temp_d_sets,point, sets)
+                            temp_d_nk_current,temp_d_sets,point, sets)
                         temp_xs[point, optimum_k] += optimum_step
                         print("xs= ",xs,"temp xs= ",temp_xs)
 
@@ -228,15 +234,19 @@ def set_mds(xs, d_current, d_goal, error, k, n_samples):
         #choose the set
         winner_set = temp_set_error.index(min(temp_set_error))
         print( temp_set_error,"winner error=", temp_set_error[winner_set], "error= ", error)   
+
+
+
+
         return 0 
         sets[n_samples + kj] = winner_set
         error = temp_set_error[winner_set]
 
         ## update distance matrix
         for ii in range(n_samples+kj+1):  #[0,1,2,0,1]
-            if(d_current[n_samples+kj][ii]  < d_sets[winner_set][sets[ii]]):
-                    d_sets[winner_set][sets[ii]] = d_current[n_samples+kj][ii]
-                    d_sets[sets[ii]][winner_set] = d_current[n_samples+kj][ii]
+            if(d_nk_current[n_samples+kj][ii]  < d_sets[winner_set][sets[ii]]):
+                    d_sets[winner_set][sets[ii]] = d_nk_current[n_samples+kj][ii]
+                    d_sets[sets[ii]][winner_set] = d_nk_current[n_samples+kj][ii]
         print("winner_set & updated distance matrix", winner_set)
         print(d_sets)
             
@@ -265,7 +275,7 @@ def set_mds(xs, d_current, d_goal, error, k, n_samples):
                     d_sets,
                     xs,
                     radius,
-                    d_current,
+                    d_nk_current,
                     d_goal,
                     point,
                     turn,
@@ -279,19 +289,19 @@ def set_mds(xs, d_current, d_goal, error, k, n_samples):
                 if (point_error >= optimum_error):
                     print("yes")
                     error -= (point_error - optimum_error)
-                    d_current = update_distance_matrix(
-                        xs, d_current, point, optimum_step, optimum_k)
-                   # print(point, d_current)
+                    d_nk_current = update_distance_matrix(
+                        xs, d_nk_current, point, optimum_step, optimum_k)
+                   # print(point, d_nk_current)
                     d_sets = update_d_sets_matrix(
-                        d_current,d_sets,point, sets)
+                        d_nk_current,d_sets,point, sets)
                     xs[point, optimum_k] += optimum_step
 
 
     # print(sets, init_error, error)
     # if(error<init_error):
     #     print("yes")
-    # print("d_current_initial \n", d_current_initial)
-    # print(" d_current \n", d_current)
+    # print("d_nk_current_initial \n", d_nk_current_initial)
+    # print(" d_nk_current \n", d_nk_current)
     # print("d_sets \n",d_sets)
     print(sets)
     print(xs)

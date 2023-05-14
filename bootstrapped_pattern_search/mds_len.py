@@ -61,7 +61,8 @@ def pattern_search_mds(d_goal,
                        n_landmarks = None,
                        allow_bad_moves='true',
                        mode = 'bootstrapped',
-                       dataset = None
+                       dataset = None,
+                       savefig='false'
                       ):
     #ta n_samples == n_landmarks otan ola ta vectors einai landmarks
     savefigs_num=0
@@ -125,23 +126,24 @@ def pattern_search_mds(d_goal,
                 xs[point, optimum_k] += optimum_step
             
             # Preparing dataset
-            x=xs[:,0]
-            y=xs[:,1]
-            text = [str(i%3) for i in range(len(xs))]  
-            # plotting scatter plot
-            plt.scatter(x, y)
-            ax = plt.gca()
-            ax.set_xlim([-11, 11])
-            ax.set_ylim([-5, 5])
-            plt.title("MDS. Turn= " + str(turn) +  " Point= " + str(point))
-            # Loop for annotation of all points
-            for i in range(len(x)):
-                plt.annotate(text[i], (x[i]+0.002, y[i] + 0.002))
+            if savefig == 'true':
+                x=xs[:,0]
+                y=xs[:,1]
+                text = [str(i) for i in range(len(xs))]  
+                # plotting scatter plot
+                plt.scatter(x, y)
+                ax = plt.gca()
+                ax.set_xlim([-1.2, 1.2])
+                ax.set_ylim([-1.2, 1.2])
+                plt.title("MDS. Turn= " + str(turn) +  " Point= " + str(point))
+                # Loop for annotation of all points
+                for i in range(len(x)):
+                    plt.annotate(text[i], (x[i]+0.002, y[i] + 0.002))
 
-            ## adjusting the scale of the axes
-            savefigs_num+=1
-            plt.savefig(f'./savefigs/mds-{savefigs_num}.png')
-            plt.close()
+                # adjusting the scale of the axes
+                savefigs_num+=1
+                plt.savefig(f'./savefigs/mds-{savefigs_num}.png')
+                plt.close()
 
         if verbose == 1:
             # total_time += time.time()-startTime
@@ -251,7 +253,8 @@ class MDS(BaseEstimator):
                  n_landmarks = None,
                  allow_bad_moves ='true',
                  mode = 'bootstrapped',
-                 dataset = None
+                 dataset = None,
+                 savefig = 'false'
                 ):
         self.radius_update_tolerance = radius_update_tolerance
         self.sample_points = sample_points
@@ -270,6 +273,7 @@ class MDS(BaseEstimator):
         self.prob_thr = prob_thr
         self.mode = mode
         self.dataset = dataset
+        self.savefig = savefig
         available_modes = ['full_search', 'bootstrapped']
         if mode in available_modes:
             self.mode = mode
@@ -314,7 +318,8 @@ class MDS(BaseEstimator):
             n_landmarks = self.n_landmarks,
             allow_bad_moves=self.allow_bad_moves,
             mode = self.mode,
-            dataset = self.dataset
+            dataset = self.dataset,
+            savefig=self.savefig
         )
         return self.embedding_, self.error_, self.epochs_, self.time_error_, self.d_current
 

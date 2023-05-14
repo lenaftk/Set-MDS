@@ -1,21 +1,18 @@
-import numpy as np
-import matplotlib.pyplot as plt
-import imageio
-np.random.seed(0)
-SIZE = 50
-y = np.random.randint(-5, 5, SIZE)
-plt.plot(y)
-plt.ylim(-10, 10)
-plt.show()
+import random
 
+# Define the number of dimensions and the range for the coordinates
+k = 2
+min_coord, max_coord = -15, 15
 
-for i in range(2, SIZE+1):
-    plt.plot(y[0:i])
-    plt.ylim(-10, 10)
-    plt.savefig(f'./savefigs/line-{i}.png')
-    plt.close()
+# Generate 10 random points with k dimensions
+num_points = 5
+points = []
+for i in range(num_points):
+    point = []
+    for j in range(k):
+        coord = random.uniform(min_coord, max_coord)
+        point.append(coord)
+    points.append(point)
 
-with imageio.get_writer('line.gif', mode='i') as writer:
-    for i in range(2, SIZE+1):
-        image = imageio.imread(f'./savefigs/line-{i}.png')
-        writer.append_data(image)
+# Print the generated points
+print(points)

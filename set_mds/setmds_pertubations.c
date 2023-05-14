@@ -18,7 +18,8 @@ void enter(){
 }
 
 double
-single_pertub_error(int n_sets, long *sets, double* d_point_temp, double* d_current_sets, double* d_current, double* d_goal,
+single_pertub_error(int n_sets, long *sets, double* d_point_temp,
+                  double* d_current_sets, double* d_current, double* d_goal,
                     double* xs, int row, int pertub_dim,
                     int x_rows, int x_cols, double step)
 {
@@ -31,7 +32,7 @@ single_pertub_error(int n_sets, long *sets, double* d_point_temp, double* d_curr
    // enter();
 
     //#pragma omp parallel for reduction (+:error)
-    for(ll = 0; ll < x_rows; ll++)
+    for(ll = 0; ll < x_rows; ll++)  //diasxizw olo ton d_current
     {
        // printf("point= %d , ll= %d ", row, ll);
         double d_prev, before, after, diff1,  d_current_temp;
@@ -41,8 +42,8 @@ single_pertub_error(int n_sets, long *sets, double* d_point_temp, double* d_curr
             diff1 = (xs[x_idx + pertub_dim] - xs[ll * x_cols + pertub_dim]);
             before = diff1 * diff1;
             after = (diff1 + step) * (diff1 + step);
-            d_current_temp = sqrt(d_prev - before + after);
-            if (d_current_temp < d_point_temp[sets[ll]]){
+            d_current_temp = sqrt(d_prev - before + after); //to kainourio distance ston d_current
+            if (d_current_temp < d_point_temp[sets[ll]]){ //einai kalutero to kainourio distance ston d_sets?
                 d_point_temp[sets[ll]] = d_current_temp;
             }
         }
@@ -61,7 +62,8 @@ single_pertub_error(int n_sets, long *sets, double* d_point_temp, double* d_curr
 
 
 pertub_res
-min_pertub_error( int n_sets, long *sets, double* d_current_sets, double* xs, double radius, double* d_current,
+min_pertub_error( int n_sets, long *sets, double* d_current_sets, 
+                   double* xs, double radius, double* d_current,
                     double* d_goal, int ii, int x_rows, int x_cols, int turn,
                     double percent, int n_jobs)
 {
@@ -69,8 +71,6 @@ min_pertub_error( int n_sets, long *sets, double* d_current_sets, double* xs, do
     struct pertub_res optimum;
     optimum.error = DBL_MAX;
     optimum.k = 0;
-    int prop_idx = 2 * x_cols * ii;
-    int min_prop_k = 0;
     double d_point_temp[n_sets];
 
 
@@ -79,39 +79,26 @@ min_pertub_error( int n_sets, long *sets, double* d_current_sets, double* xs, do
          int time_ = (int)time(NULL) ^ omp_get_thread_num() ^ ii  ^ turn ;
          srand(time_);
 #pragma omp for nowait
-        for(jj=0; jj < 2 * x_cols; jj++)
-        {
-            //double random_number = (double)rand() / (double)((unsigned)RAND_MAX);
-            // if (random_number > prop_matrix[prop_idx + jj]){
-            //     error_buf[jj] = DBL_MAX;
-            //     continue;
-            // }
-            for (hh=0; hh<n_sets; hh++){
+        for (hh=0; hh<n_sets; hh++){     //mia sigkekrimeni grammi apo ton d_current_sets
                 d_point_temp[hh] = d_current_sets[n_sets*sets[ii] + hh];
-            }
+        }
+        for(jj=0; jj < 2 * x_cols; jj++) //gia oles tis kateuthinsis, panw katw aristera deksia
+        {
             double step = jj < x_cols ? radius : -radius;
-            error_buf[jj] = single_pertub_error(n_sets, sets, d_point_temp, d_current_sets,
+            error_buf[jj] = single_pertub_error(n_sets, sets, d_point_temp, d_current_sets, //kounaw ena simeio pros mia kateuthinsi kai vriskw to error
                 d_current, d_goal, xs, ii, jj % x_cols,
                 x_rows, x_cols, step);
         }
     }
 
-    // for(jj=0; jj<2*x_cols; jj++){
-    //     if(error_buf[jj] < DBL_MAX && prop_matrix[prop_idx + jj] > prop_thr){
-    //         prop_matrix[prop_idx + jj] -= prop_step;
-    //     }
-    // }
     for(jj=0; jj < 2 * x_cols; jj++) {
         if(error_buf[jj] < optimum.error) {
             optimum.k = jj % x_cols;
             optimum.step = jj < x_cols ? radius : -radius;
             optimum.error = error_buf[jj];
-            min_prop_k = jj;
         }
     }
-    // if(prop_matrix[prop_idx + min_prop_k] + 2*prop_step <= 1.00){
-    //     prop_matrix[prop_idx + min_prop_k] += 2*prop_step;
-    // }
+
     
 
     return optimum;

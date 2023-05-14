@@ -21,16 +21,33 @@ if not isExist:
    os.makedirs(path)
    print("The new directory is created!")
 
+
+# # Create Synthetic dataset
+# savefigg = 'false'
+# k=3 #set for experiment
+# n_sets=6  #set for experiment
+# dataset1 = SyntheticDataset(n_samples=n_sets, 
+#                             n_components=2,
+#                             k=k,
+#                             seed=42,
+#                             xs=[[-1,1],[-1,2],[7,2],[-3,-3],[6,5],[6,-1],[5,4],[-5,-5],[-2,1]],  #set for experiment
+#                             sets_text=["0","1","2","3","4","5","0","1","2"]  #set for experiment
+#                             )
+# d_goal = dataset1.create_synthetic_dataset()
+# print("\n \n \nresult = \n", d_goal.shape)
+
 # Create Synthetic dataset
-k= 2
-n_sets = 3 #18
-dataset1 = SyntheticDataset(n_samples=n_sets,
+savefigg = 'false'
+k=10 #set for experiment
+n_sets=100 #set for experiment
+dataset1 = SyntheticDataset(n_samples=n_sets, 
                             n_components=2,
-                            k=k,
-                            seed=42
+                            k=k
                             )
-d_goal = dataset1.create_synthetic_dataset_2()
-print("\n \n \nresult = \n", d_goal.shape)
+d_goal,dnk,sets = dataset1.create_random_synthetic_dataset()
+print("\n \n \nresult = \n", d_goal,"\n d_sets = \n",dnk, "\n sets = \n",sets)
+
+
 
 
 # MDS routine
@@ -44,7 +61,8 @@ godzilla = MDS(
     mode = 'full_search',
     dataset='set-mds-synthetic-dataset',
    # n_landmarks = 100,
-    random_state=20
+    random_state=20,
+    savefig = savefigg
 )
 
 start = time.time()
@@ -57,4 +75,7 @@ print("Total MDS error : ", error)
 # ##### Set MDS routine. Use the d_current and the xs
 
 
-set_mds(xs,d_current, d_goal, error, k, n_sets)
+set_mds(xs,d_current, d_goal, error, k, n_sets, savefigg,sets)
+
+
+print("initia sets",sets)

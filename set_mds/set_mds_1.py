@@ -8,6 +8,7 @@
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array, check_random_state
+from scipy.spatial.distance import cdist
 import time
 import random
 import sys
@@ -47,7 +48,6 @@ def add_randompoint(xs):
 def add_new_point(xs):
     new_line=np.zeros((1,xs.shape[1]))
     xs_ = np.concatenate((xs,new_line)) 
-    print(xs_)
     return xs_
 
 def change_randompoint(xs):
@@ -64,6 +64,23 @@ def add_midpoint(xs):
     midpoint = midpoint/xs.shape[0]
     xs_ = np.concatenate((xs,midpoint)) 
     return xs_
+
+def find_midpoint(xs):
+    midpoint = np.zeros((1,xs.shape[1]))
+    for ii in range(0,xs.shape[1]):
+        midpoint[0][ii] = xs[:,ii].sum()
+    midpoint = midpoint/xs.shape[0]
+    return midpoint[0]
+
+def generate_random_point(xs):
+    min_coord = -1 #min(min(row) for row in xs)
+    max_coord = 1 #max(max(row) for row in xs)
+    point = []
+    for j in range(xs.shape[1]):
+        coord = random.uniform(min_coord, max_coord)
+        point.append(coord)
+    return np.array(point)
+
 
 def _point_sampling(points, keep_percent=1.0, turn=-1, recalculate_each=-1):
     if keep_percent > 1.0 or 1.0 - keep_percent < 1e-5:
@@ -83,17 +100,17 @@ def _matrix_initialization(n_samples,k,d_current):
             d_current_nk[jj][ii] = d_current[ii][jj]
     return set_point_error, k_set, d_current_nk
 
-def change_point_to_distance_matrix(xs,d_current):
+def change_point_to_distance_matrix(xs,d_current,point):
     xs_columns = xs.shape[1]
     xs_rows = xs.shape[0]
     for ii in range(xs_rows):
         tmp=0
         for jj in range(xs_columns):
-            diff = xs[ii][jj]-xs[xs_rows-1][jj]
+            diff = xs[ii][jj]-xs[point][jj]
             tmp += diff*diff
         tmp = np.sqrt(tmp)
-        d_current[ii][xs_rows-1] = tmp
-        d_current[xs_rows-1][ii] = tmp
+        d_current[ii][point] = tmp
+        d_current[point][ii] = tmp
     return d_current
 
 def init_point_to_distance_matrix(d_current):
@@ -105,6 +122,19 @@ def init_point_to_distance_matrix(d_current):
     return d_current
 
 def update_d_sets_matrix(d_current,d_sets,point,sets):
+ #   print("--d_current",d_current)
+ #   print("--d_sets",d_sets)
+ #   print(point)
+   # print(d_current.shape[0])
+
+    for ii in range(d_current.shape[0]):
+        if d_current[point][ii] < d_sets[sets[point]][sets[ii]]:
+            d_sets[sets[point]][sets[ii]] = d_current[point][ii]
+            d_sets[sets[ii]][sets[point]] = d_current[point][ii]
+   # print("--d_sets",d_sets)
+    return d_sets
+
+def calculate_d_sets_matrix(d_current,d_sets,point,sets):
  #   print("--d_current",d_current)
  #   print("--d_sets",d_sets)
  #   print(point)
@@ -129,76 +159,164 @@ def best_pertub(sets,
                 n_jobs):
                 print("se periptwsi anagkis...")
 
+def points_creator(xs):
+    points=[]
+    #add_midpoint
+    points.append(find_midpoint(xs))
+    #generate 5 random points
+    for ii in range(50):
+        points.append(generate_random_point(xs))
+    return points
 
-def set_mds(xs, d_current, d_goal, error, k, n_samples): 
+def calculate_set_mds_error(error,xs,sets,i,d_current):
+    d_current(xs,xs)
+
+    # N = d.shape[0]
+    # K = x.shape[0]
+    # dim = x.shape[1]
+    # E = 0
+    # valid_x_ind = np.nonzero(ind)
+    # iind = np.nonzero(ind == i)[0]
+    # tmp = np.zeros((K,))        
+    # if dim == 2:
+    #     for k in valid_x_ind[0]:
+    #         j = k
+    #         tmp[j] = np.min(np.sqrt((x[iind, 0] - x[j, 0]) ** 2 + (x[iind, 1] - x[j, 1]) ** 2))
+            
+    #     for j in range(1,N):
+    #         jind = np.nonzero(ind == j)[0]
+    #         E += (np.min(tmp[jind]) - d[i-1, j]) ** 2
+
+def count_elements(lst):
+    counts = {}
+    for x in lst:
+        if x in counts:
+            counts[x] += 1
+        else:
+            counts[x] = 1
+    print(counts)
+    return counts
+
+def compare_elements(dict1,dict2):
+    for key, value in dict1.items():
+        if dict1.get(key) == dict2.get(key):
+            print(f"{key} -> {value}", " True")
+        else:
+            print(f"{key} -> {value}", dict2.get(key), " F")
+
+
+def find_different_values(dict1, dict2):
+    # find key-value pairs in dict1 that are not in dict2
+    diff1 = {k: dict1[k] for k in set(dict1) - set(dict2) if dict1[k] != dict2.get(k)}
+
+    # find key-value pairs in dict2 that are not in dict1
+    diff2 = {k: dict2[k] for k in set(dict2) - set(dict1) if dict2[k] != dict1.get(k)}
+
+    # return the combined set of different key-value pairs
+    return {**diff1, **diff2}
+
+def set_mds(xs, d_current, d_goal, error, k, n_samples, savefig,init_sets): 
+### initializations and parameters
     savefigs_number=0
-    init_error = error
-    d_current_initial=d_current.copy()
     radius_update_tolerance=1e-20
-    max_iter=1000
+    max_iter=100
     radius_barrier=1e-10
     sample_points=1.0
     explore_dim_percent=1.0
     n_jobs=1
     starting_radius=3.0
+ ###
     #define first n sets
     sets=[]
+    
     for ii in range(n_samples):
         sets.append(int(ii))
     #initialize d_sets
     d_sets=d_current.copy()
+
     #start spliting
+    print("MDS has finished with Error:", error)
     for kj in range(k):
-        print("START!!!", kj)
-        # print("Now we are in the k= ",kj)
-        # temp_set_error=[]
-
-        #xs = add_randompoint(xs) ##or midpoint
-        #xs = add_midpoint(xs) ##or midpoint
+        pr_error=error
+        # error = np.Inf
+        print("START!!! \n kj= ", kj, " \n error= ", error)
+        #initialization for new point
         xs = add_new_point(xs)
-        xs = change_randompoint(xs)
         d_current = init_point_to_distance_matrix(d_current)
-        d_current = change_point_to_distance_matrix(xs,d_current)
-        print("xs= \n", xs)
-        print(d_current)
-        sets.append(int(0))
+        sets.append(int(-1))
+        #print("First \n", d_current) 
 
-        temp_set_error=[]
-        for set in range(n_samples):
-            sets[n_samples + kj]=set
-            #print("kj, SET IS",kj,set,sets)
-            temp_d_sets = d_sets.copy() #arxikopoiw pali ton pinaka
-            temp_set_error.append(error) #arxikopoiw to error
-            for ii in range(n_samples+kj+1):
-                #print("1.\n",d_current)
-                #print("2.\n",d_sets)
-                if(d_current[n_samples+kj][ii]  < d_sets[set][sets[ii]]):
-                    #print("yes",d_current[n_samples+kj][ii],d_sets[set][sets[ii]],n_samples+kj,ii)
-                    temp_d_sets[set][sets[ii]] = d_current[n_samples+kj][ii]
-                    temp_d_sets[sets[ii]][set] = d_current[n_samples+kj][ii]
-            temp_set_error[set] = error - mse1d(d_goal[set], d_sets[set]) + mse1d(d_goal[set], temp_d_sets[set]) 
-            error_temp = mse2d(d_goal,temp_d_sets)
+        # v= 0.03*np.cos(np.pi/4)
+        # vector = [[v, v], [-v,-v],[-v, v], [v,-v]]
+        # Evec = np.zeros((len(vector)))
+        # for i in range(xs.shape[0]-1):   #spaw ola ta simeia 
+        #     sets[-1]=sets[i]             #orise to trexon set
+        #     xorg = xs[i].copy()          #apothikeuw to simeio, gia epanafora tou argotera
+        #     for j in range(len(vector)):
+        #         xs[i] = xs[i] + vector[j]            #kounima trexon simeiou
+        #         xs[n_samples+kj] = xs[i] - vector[j]           #kounima kainouriou simeiou
+        #         Evec[j] = calculate_set_mds_error(error,xs,sets,i,d_current)   
+        #         print("outside\n", d_current)     
+        #         xs[i]=xorg                           #epanafora
 
-            # print("1.\n",d_goal)
-            # print("2.\n",d_sets)
-            # print("3.\n",temp_d_sets)
-            # print("temp_set_error[set]", set, temp_set_error)
             
-        #choose the set
-        winner_set = temp_set_error.index(min(temp_set_error))
-        print("winner error=", temp_set_error[winner_set], "from",temp_set_error, "prev-error= ", error)
-        sets[n_samples + kj] = winner_set
-        error = temp_set_error[winner_set]
 
-        ## update distance matrix
+        
+        #first_experiment_with_random_points()
+        points_to_try_as_splits = points_creator(xs)
+        temp_set_error=[]
+        saved_errors_per_point=[]
+        saved_winner_set_per_point=[]
+        for label in range(n_samples):
+            temp_set_error.append(error) #arxikopoiw to error
+        for count,split_point in enumerate(points_to_try_as_splits):
+            xs[xs.shape[0]-1,:]= split_point
+            #print("xs=", xs)
+            for label in range(n_samples):
+                sets[n_samples + kj]=label
+                temp_d_sets = d_sets.copy() #arxikopoiw pali ton pinaka
+                temp_d_current = change_point_to_distance_matrix(xs,d_current,xs.shape[0]-1)
+                for ii in range(n_samples+kj+1):
+                    if(temp_d_current[n_samples+kj][ii] < d_sets[label][sets[ii]]):
+                        temp_d_sets[label][sets[ii]] = temp_d_current[n_samples+kj][ii]
+                        temp_d_sets[sets[ii]][label] = temp_d_current[n_samples+kj][ii]
+                #print("set= ",set_, len(temp_set_error),temp_set_error)
+                #temp_set_error[label] = pr_error - mse1d(d_goal[label], d_sets[label]) + mse1d(d_goal[label], temp_d_sets[label]) 
+                temp_set_error[label] = mse2d(d_goal,temp_d_sets)
+                
+                
+            #choose the set
+            winner_set = temp_set_error.index(min(temp_set_error))
+            #print("Count: ", count, "winner set is ",winner_set)
+            # if kj==0:
+            #     winner_set = 0
+            # if kj==1:
+            #     winner_set = 1
+            # if kj==2:
+            #     winner_set = 2
+
+            #print("winner error=", temp_set_error[winner_set], "from",temp_set_error, "prev-error= ", error, winner_set, sets)
+            #sets[n_samples + kj] = winner_set
+            error = temp_set_error[winner_set]
+            saved_errors_per_point.append(error)
+            saved_winner_set_per_point.append(winner_set)
+        
+        winner_point = saved_errors_per_point.index(min(saved_errors_per_point))
+        winner_set = saved_winner_set_per_point[winner_point]
+        sets[n_samples + kj] = winner_set
+        #print("Final Winner set", winner_set)
+        
+    # update distance matrix
+        xs[xs.shape[0]-1,:]= points_to_try_as_splits[winner_point]
+        d_current = change_point_to_distance_matrix(xs,d_current,xs.shape[0]-1)
         for ii in range(n_samples+kj+1):  #[0,1,2,0,1]
             if(d_current[n_samples+kj][ii]  < d_sets[winner_set][sets[ii]]):
                     d_sets[winner_set][sets[ii]] = d_current[n_samples+kj][ii]
                     d_sets[sets[ii]][winner_set] = d_current[n_samples+kj][ii]
-        print("winner_set & updated distance matrix", winner_set)
-        print(d_sets)
-            
-            ##
+        #print("winner_set & updated distance matrix", winner_set)
+           # print(d_sets)
+        #
+        print("I have found it!")
 
         points = np.arange(n_samples+kj+1)
 
@@ -207,7 +325,7 @@ def set_mds(xs, d_current, d_goal, error, k, n_samples):
         prev_error = np.Inf
         inactive= 0
         while turn <= max_iter and radius > radius_barrier:      #oso exw akoma epanalipseis& i aktina ine sta oria
-            # print("turn = ", turn)
+            #print("Turn = ", turn, "Error= ",error)
             turn += 1    #+1 epanalipsi
             radius = _radius_update(  #update tin aktina
                 radius, error, prev_error, tolerance=radius_update_tolerance)
@@ -236,7 +354,7 @@ def set_mds(xs, d_current, d_goal, error, k, n_samples):
                 # print("pointerror= ", point_error,"optimum_error= ",optimum_error, "error", error)
                 if (point_error > optimum_error):
                     inactive = 1
-                    print("yes")
+                    #print("yes")
                     error -= (point_error - optimum_error)
                     d_current = update_distance_matrix(
                         xs, d_current, point, optimum_step, optimum_k)
@@ -248,26 +366,32 @@ def set_mds(xs, d_current, d_goal, error, k, n_samples):
 
         
                 # Preparing dataset
-                x=xs[:,0]
-                y=xs[:,1]
-                text = [sets[i] for i in range(len(xs))]  
-                # plotting scatter plot
-                plt.scatter(x, y)
-                ax = plt.gca()
-                plt.title("SET MDS. Turn= " + str(turn) +  " Point= " + str(point) )
-                ax.set_xlim([-11, 25])
-                ax.set_ylim([-10, 10])
-                
-                # Loop for annotation of all points
-                for i in range(len(x)):
-                    plt.annotate(text[i], (x[i]+0.002, y[i] + 0.002))
-  
-                ## adjusting the scale of the axes
-                savefigs_number+=1
-                plt.savefig(f'./savefigs/set-mds-{savefigs_number}.png')
-                plt.close()
-
- 
+                if savefig == 'true':
+                    x=xs[:,0]
+                    y=xs[:,1]
+                    text = [sets[i] for i in range(len(xs))]  
+                    # plotting scatter plot
+                    plt.scatter(x, y)
+                    ax = plt.gca()
+                    plt.title("SET MDS. Turn= " + str(turn) +  " Point= " + str(point) )
+                    ax.set_xlim([-1.2, 1.2])
+                    ax.set_ylim([-1.2, 1.2])
+                    
+                    # Loop for annotation of all points
+                    for i in range(len(x)):
+                        plt.annotate(text[i], (x[i]+0.002, y[i] + 0.002))
+                    # Separate the first k points from the rest
+                    blue_points = xs[:n_samples]
+                    red_points = xs[n_samples:]
+    
+                    # Create the scatter plot with blue and red points
+                    plt.scatter([p[0] for p in blue_points], [p[1] for p in blue_points], color='blue')
+                    plt.scatter([p[0] for p in red_points], [p[1] for p in red_points], color='red')
+    
+                    ## adjusting the scale of the axes
+                    savefigs_number+=1
+                    plt.savefig(f'./savefigs/set-mds-{savefigs_number}.png')
+                    plt.close()
 
 
     # print(sets, init_error, error)
@@ -276,7 +400,13 @@ def set_mds(xs, d_current, d_goal, error, k, n_samples):
     # print("d_current_initial \n", d_current_initial)
     # print(" d_current \n", d_current)
     # print("d_sets \n",d_sets)
+    #print(xs)
+
+    print(d_goal-d_sets)
     print(sets)
-    print(xs)
+    print("error",error)
+    dict1=count_elements(sets)
+    dict2=count_elements(init_sets)
+    compare_elements(dict1,dict2)
 
             

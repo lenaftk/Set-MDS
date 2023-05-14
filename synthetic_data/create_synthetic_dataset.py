@@ -15,6 +15,8 @@ class SyntheticDataset(object):
                  n_components = None,
                  k = None,
                  seed = None,
+                 xs = None,
+                 sets_text = None,
                  init = None):
         self.n_samples = n_samples
         self.n_components = n_components
@@ -24,6 +26,24 @@ class SyntheticDataset(object):
         self.sets = []
         self.Dn_k = None   #calculate distance between (n+k) x (n+k)
         self.Dn_n = None   #calculate distance between n_sets
+        self.xs = xs
+        self.sets_text = sets_text
+
+    def distance_matrix(self,A):
+        nrow = A.shape[0]
+        ncol = A.shape[1]
+        D = np.zeros((nrow, nrow), np.double)
+        
+        for ii in range(nrow):
+            for jj in range(ii + 1, nrow):
+                tmpss = 0
+                for kk in range(ncol):
+                    diff = A[ii, kk] - A[jj, kk]
+                    tmpss += diff * diff
+                tmpss = np.sqrt(tmpss)
+                D[ii, jj] = tmpss
+                D[jj, ii] = tmpss
+        return D
 
 
     def distance_matrix_between_sets(self):
@@ -39,22 +59,79 @@ class SyntheticDataset(object):
         for ii in range(self.n_samples+self.k):
             for jj in range(self.n_samples,self.n_samples+self.k):
                 if self.sets[ii] == self.sets[jj]:
-                    continue
-                if D[self.sets[ii]][self.sets[jj]] > self.Dn_k[ii][jj]:
+                   print("----ii=", ii,"jj=",jj)
+                   continue
+                if self.Dn_k[ii][jj] < D[self.sets[ii]][self.sets[jj]]:
                     D[self.sets[ii]][self.sets[jj]] = self.Dn_k[ii][jj]
                     D[self.sets[jj]][self.sets[ii]] = self.Dn_k[ii][jj]
+
         return D          
+    
+
+    def create_random_synthetic_dataset(self):
+        #self.xs= np.random.rand(self.n_samples + self.k, self.n_components)
+        self.xs = np.random.uniform(low=-1.0, high=1.0, size=(self.n_samples + self.k, self.n_components))
+        #assign points n+k points to n_sets
+        for ii in range(self.n_samples):
+            self.sets.append(ii)
+        for jj in range(self.k):
+            if self.seed == None:
+                self.sets.append(random.randint(0,self.k-1))
+            else:
+                self.sets.append(jj)
+        print(self.sets)
+        self.sets_text = [str(x) for x in self.sets]
+        self.Dn_k = self.distance_matrix(self.xs)  # distance_matrix function is written in cython
+        print(self.Dn_k)
+        self.Dn_n = self.distance_matrix_between_sets()
+                ### plotting scatter plot
+
+        x=self.xs[:,0]
+        y=self.xs[:,1]
+        plt.scatter(x, y)
+        ax = plt.gca()
+        ax.set_xlim([-1.2, 1.2])
+        ax.set_ylim([-1.2, 1.2])
+        plt.title("Initial points")
+
+        # Loop for annotation of all points
+        for i in range(len(x)):
+            plt.annotate(self.sets_text[i], (x[i]+0.00002, y[i] + 0.00002))
+
+    
+
+
+        
+        # Separate the first k points from the rest
+        blue_points = self.xs[:self.n_samples]
+        red_points = self.xs[self.n_samples:]
+    # Create the scatter plot with blue and red points
+        plt.scatter([p[0] for p in blue_points], [p[1] for p in blue_points], color='yellow')
+        plt.scatter([p[0] for p in red_points], [p[1] for p in red_points], color='orange')
+
+
+        ## adjusting the scale of the axes
+        plt.savefig(f'./savefigs/initial.png')
+        plt.close()
+        ###
+
+        # Separate the first k points from the rest
+        blue_points = self.xs[:self.n_samples]
+        red_points = self.xs[self.n_samples:]
+        return self.Dn_n,self.Dn_k, self.sets
 
 
 
-    def create_synthetic_dataset(self):
+
+
+    def create_synthetic_dataset_generic(self):
         #create n+k random points
         print(self.seed)
         if self.seed == None:
             self.seed = random.randint(1,10000)
         self.seed = check_random_state(self.seed)
         xs = self.seed.rand(self.n_samples + self.k, self.n_components)
-      
+
 
         #calculate distance between n+k random poins
         self.Dn_k = distance_matrix(xs)  # distance_matrix function is written in cython
@@ -74,76 +151,55 @@ class SyntheticDataset(object):
         self.Dn_n = self.distance_matrix_between_sets()
         return self.Dn_n  
 
-    def distance_matrix(self,A):
-        nrow = A.shape[0]
-        ncol = A.shape[1]
-        D = np.zeros((nrow, nrow), np.double)
-        
-        for ii in range(nrow):
-            for jj in range(ii + 1, nrow):
-                tmpss = 0
-                for kk in range(ncol):
-                    diff = A[ii, kk] - A[jj, kk]
-                    tmpss += diff * diff
-                tmpss = np.sqrt(tmpss)
-                D[ii, jj] = tmpss
-                D[jj, ii] = tmpss
-        return D
     
-    def create_synthetic_dataset_2(self):
-        #create n+k random points
-        print(self.seed)
-        if self.seed == None:
-            self.seed = random.randint(1,10000)
-        self.seed = check_random_state(self.seed)
-        xs = self.seed.rand(self.n_samples + self.k, self.n_components)
-        print("xs", xs)
+    
+    def create_synthetic_dataset(self):
+        #create n+k points
 
-        xs= [[10,5],[-11,2],[10,-1],[-10,5],[-10,1]]
+        self.xs=np.array(self.xs)
+        print("self.xs = ", self.xs)
 
-        #xs= [[10,5],[-11,2],[10,-1],[9,2],[5,3],[7,2],[10,1],[-5,-2],[5,-2],[6,6],[-6,6],[6,7],[-9,2],[-7,1],[-5,2],[2,3],[4,5],[-4,7],[-10,5],[-10,1]]
-
-        xs=np.array(xs)
-        print("xs", xs)
-        x=xs[:,0]
-        y=xs[:,1]
-        text = [str(i%3) for i in range(5)]  
-        #text = ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","0","8"]
-        # text = ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","0","15"] == to vriskei swsta
-
-        # for ii in range(15):
-        #     text.append[0]
-        # plotting scatter plot
+        ### plotting scatter plot
+        x=self.xs[:,0]
+        y=self.xs[:,1]
         plt.scatter(x, y)
         ax = plt.gca()
-        ax.set_xlim([-13, 13])
-        ax.set_ylim([-7, 7])
+        ax.set_xlim([-15, 15])
+        ax.set_ylim([-15, 15])
         plt.title("Initial points")
+
         # Loop for annotation of all points
         for i in range(len(x)):
-            plt.annotate(text[i], (x[i]+0.002, y[i] + 0.002))
+            plt.annotate(self.sets_text[i], (x[i]+0.002, y[i] + 0.002))
+
+        # Separate the first k points from the rest
+        blue_points = self.xs[:self.n_samples]
+        red_points = self.xs[self.n_samples:]
+    
+    # Create the scatter plot with blue and red points
+        plt.scatter([p[0] for p in blue_points], [p[1] for p in blue_points], color='blue')
+        plt.scatter([p[0] for p in red_points], [p[1] for p in red_points], color='red')
+
 
         ## adjusting the scale of the axes
         plt.savefig(f'./savefigs/initial.png')
         plt.close()
+        ###
     
 
-        #calculate distance between n+k random poins
-        self.Dn_k = self.distance_matrix(xs)  # distance_matrix function is written in cython
+        #calculate distance between n+k (xs)
+        self.Dn_k = self.distance_matrix(self.xs)  # distance_matrix function is written in cython
         print(self.Dn_k)
 
-        #assign points n+k points to n_sets
-        for ii in range(self.n_samples):
-            self.sets.append(ii)
-        for jj in range(self.k):
-            if self.seed == None:
-                self.sets.append(random.randint(0,self.k-1))
-            else:
-                self.sets.append(jj)
+        #assign points n+k points to n_sets, manually
+        self.sets = [eval(i) for i in self.sets_text]
         print(self.sets)
-
+        
+        
         #calculate distance between sets
         self.Dn_n = self.distance_matrix_between_sets()
+        print("self-sets=", self.sets)
+        print("self.Dn_k= \n",self.Dn_k,"\n self.Dn_n= \n", self.Dn_n)
         return self.Dn_n  
 
 

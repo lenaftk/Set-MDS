@@ -130,7 +130,7 @@ def best_pertub(sets,
                 print("se periptwsi anagkis...")
 
 
-def set_mds(xs, d_current, d_goal, error, k, n_samples): 
+def set_mds(xs, d_current, d_goal, error, k, n_samples, savefig): 
     savefig_number=0
     init_error = error
     d_current_initial=d_current.copy()
@@ -250,26 +250,27 @@ def set_mds(xs, d_current, d_goal, error, k, n_samples):
                         temp_set_error[winner_set]=np.inf
         
                 # Preparing dataset
-                x=xs[:,0]
-                y=xs[:,1]
-                # text = ["0","1","2","0","1","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2"]
+                if savefig == 'true':
+                    x=xs[:,0]
+                    y=xs[:,1]
+                    # text = ["0","1","2","0","1","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2"]
 
-                text = [sets[i] for i in range(len(xs))]  
-                # plotting scatter plot
-                plt.scatter(x, y)
-                ax = plt.gca()
-                plt.title("SET MDS. Turn= " + str(turn) +  " Point= " + str(point) )
-                ax.set_xlim([-11, 25])
-                ax.set_ylim([-10, 10])
-                
-                # Loop for annotation of all points
-                for i in range(len(x)):
-                    plt.annotate(text[i], (x[i]+0.002, y[i] + 0.002))
-  
-                ## adjusting the scale of the axes
-                savefig_number+=1
-                plt.savefig(f'./savefigs/set-mds-{savefig_number}.png')
-                plt.close()
+                    text = [sets[i] for i in range(len(xs))]  
+                    # plotting scatter plot
+                    plt.scatter(x, y)
+                    ax = plt.gca()
+                    plt.title("SET MDS. Turn= " + str(turn) +  " Point= " + str(point) )
+                    ax.set_xlim([-11, 25])
+                    ax.set_ylim([-10, 10])
+                    
+                    # Loop for annotation of all points
+                    for i in range(len(x)):
+                        plt.annotate(text[i], (x[i]+0.002, y[i] + 0.002))
+    
+                    ## adjusting the scale of the axes
+                    savefig_number+=1
+                    plt.savefig(f'./savefigs/set-mds-{savefig_number}.png')
+                    plt.close()
 
  
 
