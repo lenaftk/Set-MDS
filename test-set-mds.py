@@ -38,8 +38,8 @@ if not isExist:
 
 # Create Synthetic dataset
 savefigg = 'false'
-k=10 #set for experiment
-n_sets=100 #set for experiment
+k=1 #set for experiment
+n_sets=10 #set for experiment
 dataset1 = SyntheticDataset(n_samples=n_sets, 
                             n_components=2,
                             k=k
@@ -76,6 +76,3 @@ print("Total MDS error : ", error)
 
 
 set_mds(xs,d_current, d_goal, error, k, n_sets, savefigg,sets)
-
-
-print("initia sets",sets)

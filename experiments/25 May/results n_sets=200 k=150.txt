@@ -1,0 +1,209 @@
+0 -> 1  True 
+1 -> 2  True 
+2 -> 1  True 
+3 -> 1  True 
+4 -> Algorithm found 2, but it was 5 
+5 -> 1  True 
+6 -> Algorithm found 3, but it was 2 
+7 -> 1  True 
+8 -> Algorithm found 5, but it was 4 
+9 -> Algorithm found 1, but it was 2 
+10 -> Algorithm found 1, but it was 2 
+11 -> 4  True 
+12 -> Algorithm found 3, but it was 4 
+13 -> 1  True 
+14 -> Algorithm found 2, but it was 3 
+15 -> Algorithm found 2, but it was 3 
+16 -> 1  True 
+17 -> 2  True 
+18 -> 1  True 
+19 -> Algorithm found 3, but it was 2 
+20 -> 2  True 
+21 -> 2  True 
+22 -> 2  True 
+23 -> 1  True 
+24 -> 1  True 
+25 -> 1  True 
+26 -> 4  True 
+27 -> Algorithm found 3, but it was 2 
+28 -> 2  True 
+29 -> 3  True 
+30 -> 2  True 
+31 -> 1  True 
+32 -> Algorithm found 4, but it was 3 
+33 -> 2  True 
+34 -> 1  True 
+35 -> 1  True 
+36 -> 1  True 
+37 -> 1  True 
+38 -> Algorithm found 1, but it was 2 
+39 -> Algorithm found 1, but it was 2 
+40 -> Algorithm found 3, but it was 4 
+41 -> 1  True 
+42 -> Algorithm found 2, but it was 3 
+43 -> 2  True 
+44 -> Algorithm found 1, but it was 2 
+45 -> 1  True 
+46 -> 1  True 
+47 -> Algorithm found 3, but it was 2 
+48 -> 1  True 
+49 -> Algorithm found 2, but it was 3 
+50 -> Algorithm found 4, but it was 2 
+51 -> 1  True 
+52 -> Algorithm found 1, but it was 2 
+53 -> 1  True 
+54 -> 3  True 
+55 -> Algorithm found 1, but it was 2 
+56 -> 1  True 
+57 -> Algorithm found 1, but it was 2 
+58 -> 1  True 
+59 -> 1  True 
+60 -> 1  True 
+61 -> 2  True 
+62 -> 1  True 
+63 -> 3  True 
+64 -> 3  True 
+65 -> Algorithm found 1, but it was 2 
+66 -> 1  True 
+67 -> 1  True 
+68 -> Algorithm found 5, but it was 3 
+69 -> 1  True 
+70 -> Algorithm found 3, but it was 2 
+71 -> 1  True 
+72 -> 1  True 
+73 -> 2  True 
+74 -> 2  True 
+75 -> Algorithm found 3, but it was 4 
+76 -> Algorithm found 1, but it was 2 
+77 -> 2  True 
+78 -> Algorithm found 4, but it was 2 
+79 -> 1  True 
+80 -> 1  True 
+81 -> Algorithm found 2, but it was 3 
+82 -> 1  True 
+83 -> Algorithm found 4, but it was 3 
+84 -> 1  True 
+85 -> Algorithm found 3, but it was 2 
+86 -> Algorithm found 1, but it was 2 
+87 -> 1  True 
+88 -> 1  True 
+89 -> Algorithm found 1, but it was 3 
+90 -> 2  True 
+91 -> Algorithm found 1, but it was 2 
+92 -> 2  True 
+93 -> Algorithm found 2, but it was 3 
+94 -> 1  True 
+95 -> 1  True 
+96 -> Algorithm found 1, but it was 2 
+97 -> 2  True 
+98 -> 1  True 
+99 -> 1  True 
+100 -> 1  True 
+101 -> 1  True 
+102 -> Algorithm found 1, but it was 2 
+103 -> 1  True 
+104 -> 1  True 
+105 -> Algorithm found 3, but it was 2 
+106 -> 2  True 
+107 -> 2  True 
+108 -> 1  True 
+109 -> Algorithm found 1, but it was 2 
+110 -> 2  True 
+111 -> Algorithm found 3, but it was 2 
+112 -> 2  True 
+113 -> Algorithm found 6, but it was 3 
+114 -> 3  True 
+115 -> 1  True 
+116 -> 1  True 
+117 -> 1  True 
+118 -> 1  True 
+119 -> 2  True 
+120 -> Algorithm found 3, but it was 2 
+121 -> Algorithm found 4, but it was 2 
+122 -> 1  True 
+123 -> 1  True 
+124 -> 4  True 
+125 -> 1  True 
+126 -> Algorithm found 2, but it was 3 
+127 -> 1  True 
+128 -> 1  True 
+129 -> 1  True 
+130 -> Algorithm found 4, but it was 2 
+131 -> 1  True 
+132 -> Algorithm found 1, but it was 2 
+133 -> 1  True 
+134 -> Algorithm found 3, but it was 2 
+135 -> 1  True 
+136 -> 1  True 
+137 -> 1  True 
+138 -> 1  True 
+139 -> 1  True 
+140 -> Algorithm found 2, but it was 3 
+141 -> 1  True 
+142 -> 1  True 
+143 -> 1  True 
+144 -> 1  True 
+145 -> 2  True 
+146 -> Algorithm found 2, but it was 3 
+147 -> 3  True 
+148 -> 1  True 
+149 -> 1  True 
+150 -> 3  True 
+151 -> 1  True 
+152 -> 1  True 
+153 -> 1  True 
+154 -> Algorithm found 1, but it was 2 
+155 -> 1  True 
+156 -> Algorithm found 2, but it was 1 
+157 -> Algorithm found 1, but it was 2 
+158 -> 1  True 
+159 -> 1  True 
+160 -> Algorithm found 3, but it was 2 
+161 -> 2  True 
+162 -> 2  True 
+163 -> Algorithm found 4, but it was 3 
+164 -> 1  True 
+165 -> 1  True 
+166 -> Algorithm found 1, but it was 2 
+167 -> 2  True 
+168 -> 1  True 
+169 -> 1  True 
+170 -> Algorithm found 3, but it was 2 
+171 -> 1  True 
+172 -> Algorithm found 3, but it was 2 
+173 -> Algorithm found 3, but it was 2 
+174 -> 1  True 
+175 -> 1  True 
+176 -> 1  True 
+177 -> 3  True 
+178 -> 3  True 
+179 -> Algorithm found 3, but it was 2 
+180 -> 3  True 
+181 -> 2  True 
+182 -> 1  True 
+183 -> 1  True 
+184 -> 2  True 
+185 -> 1  True 
+186 -> 1  True 
+187 -> 1  True 
+188 -> 1  True 
+189 -> Algorithm found 3, but it was 2 
+190 -> Algorithm found 4, but it was 3 
+191 -> Algorithm found 1, but it was 2 
+192 -> 1  True 
+193 -> 2  True 
+194 -> Algorithm found 2, but it was 1 
+195 -> Algorithm found 3, but it was 2 
+196 -> 2  True 
+197 -> 3  True 
+198 -> 1  True 
+199 -> 2  True 
+
+TRUE= 136, FALSE= 64 ,PERCENTAGE= 68.0%
+
+correct_splits= 95,PERCENTAGE= 63.33333333333333% 
+
+k(splits)=150, n(sets)= 200 
+
+algo sets [0, 1, 1, 2, 3, 4, 4, 5, 6, 6, 6, 7, 8, 8, 8, 8, 8, 9, 10, 11, 11, 11, 11, 12, 12, 12, 13, 14, 14, 15, 15, 16, 17, 17, 18, 19, 19, 19, 20, 20, 21, 21, 22, 22, 23, 24, 25, 26, 26, 26, 26, 27, 27, 27, 28, 28, 29, 29, 29, 30, 30, 31, 32, 32, 32, 32, 33, 33, 34, 35, 36, 37, 38, 39, 40, 40, 40, 41, 42, 42, 43, 43, 44, 45, 46, 47, 47, 47, 48, 49, 49, 50, 50, 50, 50, 51, 52, 53, 54, 54, 54, 55, 56, 57, 58, 59, 60, 61, 61, 62, 63, 63, 63, 64, 64, 64, 65, 66, 67, 68, 68, 68, 68, 68, 69, 70, 70, 70, 71, 72, 73, 73, 74, 74, 75, 75, 75, 76, 77, 77, 78, 78, 78, 78, 79, 80, 81, 81, 82, 83, 83, 83, 83, 84, 85, 85, 85, 86, 87, 88, 89, 90, 90, 91, 92, 92, 93, 93, 94, 95, 96, 97, 97, 98, 99, 100, 101, 102, 103, 104, 105, 105, 105, 106, 106, 107, 107, 108, 109, 110, 110, 111, 111, 111, 112, 112, 113, 113, 113, 113, 113, 113, 114, 114, 114, 115, 116, 117, 118, 119, 119, 120, 120, 120, 121, 121, 121, 121, 122, 123, 124, 124, 124, 124, 125, 126, 126, 127, 128, 129, 130, 130, 130, 130, 131, 132, 133, 134, 134, 134, 135, 136, 137, 138, 139, 140, 140, 141, 142, 143, 144, 145, 145, 146, 146, 147, 147, 147, 148, 149, 150, 150, 150, 151, 152, 153, 154, 155, 156, 156, 157, 158, 159, 160, 160, 160, 161, 161, 162, 162, 163, 163, 163, 163, 164, 165, 166, 167, 167, 168, 169, 170, 170, 170, 171, 172, 172, 172, 173, 173, 173, 174, 175, 176, 177, 177, 177, 178, 178, 178, 179, 179, 179, 180, 180, 180, 181, 181, 182, 183, 184, 184, 185, 186, 187, 188, 189, 189, 189, 190, 190, 190, 190, 191, 192, 193, 193, 194, 194, 195, 195, 195, 196, 196, 197, 197, 197, 198, 199, 199] 
+init sets [0, 1, 1, 2, 3, 4, 4, 4, 4, 4, 5, 6, 6, 7, 8, 8, 8, 8, 9, 9, 10, 10, 11, 11, 11, 11, 12, 12, 12, 12, 13, 14, 14, 14, 15, 15, 15, 16, 17, 17, 18, 19, 19, 20, 20, 21, 21, 22, 22, 23, 24, 25, 26, 26, 26, 26, 27, 27, 28, 28, 29, 29, 29, 30, 30, 31, 32, 32, 32, 33, 33, 34, 35, 36, 37, 38, 38, 39, 39, 40, 40, 40, 40, 41, 42, 42, 42, 43, 43, 44, 44, 45, 46, 47, 47, 48, 49, 49, 49, 50, 50, 51, 52, 52, 53, 54, 54, 54, 55, 55, 56, 57, 57, 58, 59, 60, 61, 61, 62, 63, 63, 63, 64, 64, 64, 65, 65, 66, 67, 68, 68, 68, 69, 70, 70, 71, 72, 73, 73, 74, 74, 75, 75, 75, 75, 76, 76, 77, 77, 78, 78, 79, 80, 81, 81, 81, 82, 83, 83, 83, 84, 85, 85, 86, 86, 87, 88, 89, 89, 89, 90, 90, 91, 91, 92, 92, 93, 93, 93, 94, 95, 96, 96, 97, 97, 98, 99, 100, 101, 102, 102, 103, 104, 105, 105, 106, 106, 107, 107, 108, 109, 109, 110, 110, 111, 111, 112, 112, 113, 113, 113, 114, 114, 114, 115, 116, 117, 118, 119, 119, 120, 120, 121, 121, 122, 123, 124, 124, 124, 124, 125, 126, 126, 126, 127, 128, 129, 130, 130, 131, 132, 132, 133, 134, 134, 135, 136, 137, 138, 139, 140, 140, 140, 141, 142, 143, 144, 145, 145, 146, 146, 146, 147, 147, 147, 148, 149, 150, 150, 150, 151, 152, 153, 154, 154, 155, 156, 157, 157, 158, 159, 160, 160, 161, 161, 162, 162, 163, 163, 163, 164, 165, 166, 166, 167, 167, 168, 169, 170, 170, 171, 172, 172, 173, 173, 174, 175, 176, 177, 177, 177, 178, 178, 178, 179, 179, 180, 180, 180, 181, 181, 182, 183, 184, 184, 185, 186, 187, 188, 189, 189, 190, 190, 190, 191, 191, 192, 193, 193, 194, 195, 195, 196, 196, 197, 197, 197, 198, 199, 199] 

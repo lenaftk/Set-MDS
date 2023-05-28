@@ -76,7 +76,7 @@ class SyntheticDataset(object):
             self.sets.append(ii)
         for jj in range(self.k):
             if self.seed == None:
-                self.sets.append(random.randint(0,self.k-1))
+                self.sets.append(random.randint(0,self.n_samples-1))
             else:
                 self.sets.append(jj)
         print(self.sets)

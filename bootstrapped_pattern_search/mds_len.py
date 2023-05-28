@@ -73,12 +73,15 @@ def pattern_search_mds(d_goal,
     d_goal = d_goal[:,0:n_landmarks].copy(order='C')
 
     print("n_landmarks = ", n_landmarks)
+    
+
     if random_state == None:
         random_state = random.randint(1,10000)  ######to prosthesa giati den ginotan random, alliws den xriazete!!!
     print("random_state=", random_state)
     random_state = check_random_state(random_state)  ###isws prepei na to valw polles fores, na tsekareis ligo an allazoun
+    xs = init if init is not None else random_state.rand(n_samples, n_components) - 0.5
+    xs *= 2
     
-    xs = init if init is not None else random_state.rand(n_samples, n_components)
     print(xs)
     time_error,time_per_epoch,time_error2, time_per_epoch2 = [],[],[],[]
     startTime = time.time()

@@ -1,0 +1,29 @@
+0 -> 1  True 
+1 -> 1  True 
+2 -> 1  True 
+3 -> 1  True 
+4 -> 1  True 
+5 -> 1  True 
+6 -> 1  True 
+7 -> 1  True 
+8 -> 1  True 
+9 -> 1  True 
+10 -> 1  True 
+11 -> 1  True 
+12 -> 1  True 
+13 -> 1  True 
+14 -> 1  True 
+15 -> 1  True 
+16 -> 2  True 
+17 -> 1  True 
+18 -> 1  True 
+19 -> 1  True 
+
+TRUE= 20, FALSE= 0 ,PERCENTAGE= 100.0%
+
+correct_splits= 1,PERCENTAGE= 100.0% 
+
+k(splits)=1, n(sets)= 20 
+
+algo sets [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 16, 17, 18, 19] 
+init sets [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 16, 17, 18, 19] 

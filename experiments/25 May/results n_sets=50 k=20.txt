@@ -1,0 +1,59 @@
+0 -> 1  True 
+1 -> 1  True 
+2 -> 1  True 
+3 -> 1  True 
+4 -> 2  True 
+5 -> 2  True 
+6 -> 1  True 
+7 -> 2  True 
+8 -> 1  True 
+9 -> Algorithm found 1, but it was 2 
+10 -> Algorithm found 1, but it was 2 
+11 -> Algorithm found 3, but it was 2 
+12 -> 1  True 
+13 -> Algorithm found 1, but it was 2 
+14 -> 2  True 
+15 -> 1  True 
+16 -> 1  True 
+17 -> Algorithm found 3, but it was 2 
+18 -> Algorithm found 3, but it was 2 
+19 -> 1  True 
+20 -> 1  True 
+21 -> 1  True 
+22 -> 1  True 
+23 -> Algorithm found 3, but it was 2 
+24 -> 1  True 
+25 -> 1  True 
+26 -> 1  True 
+27 -> Algorithm found 1, but it was 2 
+28 -> 1  True 
+29 -> Algorithm found 2, but it was 1 
+30 -> 1  True 
+31 -> 2  True 
+32 -> 1  True 
+33 -> 1  True 
+34 -> 2  True 
+35 -> 1  True 
+36 -> 1  True 
+37 -> 1  True 
+38 -> Algorithm found 3, but it was 2 
+39 -> 1  True 
+40 -> 2  True 
+41 -> Algorithm found 3, but it was 2 
+42 -> 1  True 
+43 -> Algorithm found 1, but it was 2 
+44 -> Algorithm found 1, but it was 2 
+45 -> 1  True 
+46 -> 1  True 
+47 -> Algorithm found 1, but it was 2 
+48 -> 1  True 
+49 -> 1  True 
+
+TRUE= 36, FALSE= 14 ,PERCENTAGE= 72.0%
+
+correct_splits= 13,PERCENTAGE= 65.0% 
+
+k(splits)=20, n(sets)= 50 
+
+algo sets [0, 1, 2, 3, 4, 4, 5, 5, 6, 7, 7, 8, 9, 10, 11, 11, 11, 12, 13, 14, 14, 15, 16, 17, 17, 17, 18, 18, 18, 19, 20, 21, 22, 23, 23, 23, 24, 25, 26, 27, 28, 29, 29, 30, 31, 31, 32, 33, 34, 34, 35, 36, 37, 38, 38, 38, 39, 40, 40, 41, 41, 41, 42, 43, 44, 45, 46, 47, 48, 49] 
+init sets [0, 1, 2, 3, 4, 4, 5, 5, 6, 7, 7, 8, 9, 9, 10, 10, 11, 11, 12, 13, 13, 14, 14, 15, 16, 17, 17, 18, 18, 19, 20, 21, 22, 23, 23, 24, 25, 26, 27, 27, 28, 29, 30, 31, 31, 32, 33, 34, 34, 35, 36, 37, 38, 38, 39, 40, 40, 41, 41, 42, 43, 43, 44, 44, 45, 46, 47, 47, 48, 49] 

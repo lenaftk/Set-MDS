@@ -3,8 +3,7 @@
 #import pyximport; pyximport.install(pyimport = True)
 
 ### periexei prin tin allagi me to inactive.
-#the one with the middle. Vlepoume oti to error stin arxi den nienai  mikrotero aapo prin, kai meta den mikrainei  kiolas kialo epilegoume lathos set eksarxis.
- 
+#
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array, check_random_state
@@ -164,7 +163,7 @@ def points_creator(xs):
     #add_midpoint
     points.append(find_midpoint(xs))
     #generate 5 random points
-    for ii in range(50):
+    for ii in range(5):
         points.append(generate_random_point(xs))
     return points
 
@@ -197,13 +196,33 @@ def count_elements(lst):
     print(counts)
     return counts
 
-def compare_elements(dict1,dict2):
+def compare_elements(dict1,dict2,k,n,file):
+    true_ = 0
+    false_ = 0
+    correct_split=0
     for key, value in dict1.items():
         if dict1.get(key) == dict2.get(key):
             print(f"{key} -> {value}", " True")
+            file.write("{} -> {}  True \n".format(key,value))
+            if dict1.get(key) > 1:
+                print("correct split")
+                correct_split+=1
+            true_ += 1
         else:
-            print(f"{key} -> {value}", dict2.get(key), " F")
+            print(f"{key} -> Algorithm found {value}, but it was ", dict2.get(key))
+            file.write("{} -> Algorithm found {}, but it was {} \n".format(key,value,dict2.get(key)))
+            false_ +=1
+            if dict2.get(key) >1 and dict1.get(key)>1:
+                if dict2.get(key)>dict1.get(key):
+                    correct_split+=dict2.get(key)-dict1.get(key)
+                else: 
+                    correct_split+=dict2.get(key)-1
+                    
 
+    print("\nTRUE=", true_, ", FALSE=",false_, "PERCENTAGE= ",(true_/(false_+true_))*100,"%", ", k(splits)=", k, ", n(sets)=", n)
+    file.write("\nTRUE= {}, FALSE= {} ,PERCENTAGE= {}%\n".format(true_,false_,(true_/(false_+true_))*100))
+    file.write("\ncorrect_splits= {},PERCENTAGE= {}% \n".format(correct_split,correct_split/k *100))
+    file.write("\nk(splits)={}, n(sets)= {} \n".format(k,n))
 
 def find_different_values(dict1, dict2):
     # find key-value pairs in dict1 that are not in dict2
@@ -224,7 +243,7 @@ def set_mds(xs, d_current, d_goal, error, k, n_samples, savefig,init_sets):
     sample_points=1.0
     explore_dim_percent=1.0
     n_jobs=1
-    starting_radius=3.0
+    starting_radius=2.5
  ###
     #define first n sets
     sets=[]
@@ -316,7 +335,7 @@ def set_mds(xs, d_current, d_goal, error, k, n_samples, savefig,init_sets):
         #print("winner_set & updated distance matrix", winner_set)
            # print(d_sets)
         #
-        print("I have found it!")
+        #print("I have found it!")
 
         points = np.arange(n_samples+kj+1)
 
@@ -403,10 +422,20 @@ def set_mds(xs, d_current, d_goal, error, k, n_samples, savefig,init_sets):
     #print(xs)
 
     print(d_goal-d_sets)
-    print(sets)
+ 
     print("error",error)
     dict1=count_elements(sets)
     dict2=count_elements(init_sets)
-    compare_elements(dict1,dict2)
+    file = open("./experiments/25 May/results n_sets={} k={}.txt".format(n_samples,k), "w")
+    
+    compare_elements(dict1,dict2,k,n_samples,file)
+    sets.sort()
+    init_sets.sort()
+    print("\n algo sets",sets)
+    print(" init sets",init_sets)
+    file.write("\nalgo sets {} \n".format(sets))
+    file.write("init sets {} ".format(init_sets))
 
+    return sets
+  
             

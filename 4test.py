@@ -2,10 +2,10 @@ import cv2
 import os
 
 # Set the directory where your PNG files are located
-png_dir = './savefigs'
+png_dir = './savefigs-success!'
 
 # Set the name of the output video file
-video_name = 'output.mp4'
+video_name = 'output-success.mp4'
 
 # Set the frame rate for the output video (in frames per second)
 fps = 30

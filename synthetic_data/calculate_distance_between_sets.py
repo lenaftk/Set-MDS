@@ -15,7 +15,7 @@ from set_mds_fast import (
     sets_distance_matrix
 )
 
-    def initialize_random_points(n_samples, n_components,init,random_state):
+def initialize_random_points(n_samples, n_components,init,random_state):
         if random_state == None:
             random_state = random.randint(1,10000)  ######to prosthesa giati den ginotan random, alliws den xriazete!!!
         random_state = check_random_state(random_state)  ###isws prepei na to valw polles fores, na tsekareis ligo an allazoun

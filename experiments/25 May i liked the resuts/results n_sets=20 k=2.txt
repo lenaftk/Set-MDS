@@ -1,0 +1,27 @@
+0 -> 1  True 
+1 -> 1  True 
+2 -> 1  True 
+3 -> 1  True 
+4 -> 1  True 
+5 -> 1  True 
+6 -> Algorithm found 1, but it was 2 
+7 -> 1  True 
+8 -> 1  True 
+9 -> 1  True 
+10 -> Algorithm found 2, but it was 1 
+11 -> 2  True 
+12 -> 1  True 
+13 -> 1  True 
+14 -> 1  True 
+15 -> 1  True 
+16 -> 1  True 
+17 -> 1  True 
+18 -> 1  True 
+19 -> 1  True 
+
+TRUE= 18, FALSE= 2 ,PERCENTAGE= 90.0%, k(splits)=2, n(sets)= 20 
+
+correct_splits= 1,PERCENTAGE= 50.0% 
+
+algo sets [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 11, 11, 12, 13, 14, 15, 16, 17, 18, 19] 
+init sets [0, 1, 2, 3, 4, 5, 6, 6, 7, 8, 9, 10, 11, 11, 12, 13, 14, 15, 16, 17, 18, 19] 
